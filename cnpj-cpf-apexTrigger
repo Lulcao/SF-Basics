@@ -1,0 +1,19 @@
+trigger ValidateOpportunity on Opportunity (before insert, before update) {
+        if (Trigger.isBefore) {
+            for(Opportunity opp : trigger.new){
+
+                if (opp.CPF__c != NULL){
+                if(Validate.isCPF(opp.CPF__c.replace('.','').replace('-','')))
+                        opp.CPF__c = Validate.imprimeCPF(opp.CPF__c.replace('.','').replace('-',''));
+                else
+                    opp.addError('CPF Inváido');
+                }
+                if (opp.CNPJ__c != NULL){
+               	if(Validate.isCNPJ(opp.CNPJ__c.replace('.','').replace('/','').replace('-','')))
+                        opp.CNPJ__c = Validate.imprimeCNPJ(opp.CNPJ__c.replace('.','').replace('/','').replace('-',''));
+                else
+                        opp.addError('CNPJ Inválido');
+				}
+            }
+        }
+}
